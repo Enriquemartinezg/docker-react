@@ -1,0 +1,23 @@
+# Crear este docker compose nos permite simplificar el comando a la hora de crear los volumenes.
+# Reduce "docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <image_id>" a docker-compose up
+version: '3'
+services: 
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+  tests:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
+
+# Se crean dos contenedores, uno para lanzar el programa y otro para lanzar una dependencia de pruebas.
